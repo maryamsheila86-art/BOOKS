@@ -10,4 +10,4 @@ main = "bulk-insert.js"
 [[d1_databases]]
 binding = "DB" # Nama ini (DB) HARUS SAMA dengan di skrip .js (env.DB)
 database_name = "database-buku"
-database_id = "b93d0016-2364-4aa3-9ec9-e0e17911af2c" # ID Anda dari error log
+database_id = "2b15ba06-a798-412d-82cb-3f9e65036ff2" # ID Anda dari error log
