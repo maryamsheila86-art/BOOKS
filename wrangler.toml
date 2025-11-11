@@ -1,13 +1,10 @@
-# File: wrangler.toml
-
-name = "web-buku-project"
+# Hardcode: wrangler.toml
+# Ini file konfigurasi Wrangler biar dia nggak bingung
+name = "web-buku-project" # Nama ini bebas, nggak ngaruh
 compatibility_date = "2024-05-01"
 
-# Beri tahu wrangler di mana skrip utamanya
-main = "bulk-insert.js"
-
-# Ini adalah binding database Anda, sudah benar
+# Ini bagian PENTING-nya
 [[d1_databases]]
-binding = "DB" # Nama ini (DB) HARUS SAMA dengan di skrip .js (env.DB)
-database_name = "database-buku"
+binding = "DB" # Nama binding (nggak kita pake di script, tapi wajib ada)
+database_name = "database-buku" # Ini NAMA yang bakal kita pake di script
 database_id = "2b15ba06-a798-412d-82cb-3f9e65036ff2" # ID Anda dari error log
