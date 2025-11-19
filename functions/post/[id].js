@@ -15,8 +15,9 @@ async function getPost(db, id) {
   return result;
 }
 
-// --- TEMPLATE HALAMAN 404 KHUSUS (INI YANG BARU) ---
-// Kita taruh HTML "Click to Download" langsung di sini supaya cepat
+// ====================================================================
+// TEMPLATE HALAMAN 404 BARU: FAKE PDF VIEWER (BURAM + GEMBOK)
+// ====================================================================
 function render404Page() {
   return `
     <!DOCTYPE html>
@@ -24,23 +25,100 @@ function render404Page() {
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Download Ready</title>
+        <title>Secure Document Viewer</title>
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap" rel="stylesheet" />
         <style>
           * { margin: 0; padding: 0; box-sizing: border-box; }
-          body { font-family: "Poppins", sans-serif; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; background-color: #f8f9fa; text-align: center; }
-          .container { padding: 20px; animation: fadeIn 0.5s ease-in; }
-          .download-btn { display: inline-block; background-color: #007bff; color: #ffffff; font-size: 24px; font-weight: 700; padding: 25px 60px; text-decoration: none; border-radius: 50px; box-shadow: 0 10px 25px rgba(0, 123, 255, 0.3); transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
-          .download-btn:hover { background-color: #0056b3; transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0, 123, 255, 0.4); }
-          .status-msg { margin-bottom: 20px; color: #6c757d; font-size: 1.2rem; font-weight: 600; }
-          @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+          body { 
+            font-family: "Poppins", sans-serif; 
+            background-color: #525659; 
+            overflow: hidden; 
+            height: 100vh;
+            position: relative;
+          }
+
+          /* --- LAYER 1: DOKUMEN PALSU YANG DIBURAMKAN --- */
+          .pdf-viewer-container {
+            filter: blur(6px); 
+            opacity: 0.8;
+            pointer-events: none; 
+            user-select: none;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          }
+
+          .pdf-header {
+            width: 100%; height: 50px; background-color: #323639;
+            display: flex; align-items: center; padding: 0 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+          }
+          .fake-menu { width: 20px; height: 2px; background: #aaa; margin-right: 5px; box-shadow: 0 5px 0 #aaa, 0 -5px 0 #aaa; }
+          .fake-title { width: 150px; height: 10px; background: #555; border-radius: 4px; margin-left: 15px; }
+
+          .pdf-page {
+            background: white; width: 800px; max-width: 90%; height: 120vh;
+            margin-top: 20px; padding: 50px; box-shadow: 0 0 15px rgba(0,0,0,0.5);
+          }
+
+          .skeleton-line { background: #e0e0e0; height: 12px; margin-bottom: 15px; border-radius: 2px; }
+          .skeleton-img { background: #ddd; height: 200px; width: 100%; margin-bottom: 30px; border-radius: 4px; }
+          .w-100 { width: 100%; } .w-80 { width: 80%; } .w-60 { width: 60%; } .w-40 { width: 40%; }
+          .h-title { height: 24px; margin-bottom: 30px; background: #333; }
+
+          /* --- LAYER 2: TOMBOL OVERLAY (JELAS) --- */
+          .overlay-container {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 10; background: rgba(0, 0, 0, 0.3);
+          }
+
+          .card-box {
+            background: white; padding: 40px; border-radius: 15px; text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3); max-width: 90%; width: 400px;
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          }
+
+          .lock-icon { margin-bottom: 15px; color: #dc3545; }
+          .status-text { font-size: 1.1rem; color: #333; margin-bottom: 25px; font-weight: 600; }
+
+          .download-btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+            background-color: #007bff; color: white; font-size: 18px; font-weight: 700;
+            padding: 15px 30px; text-decoration: none; border-radius: 50px;
+            box-shadow: 0 10px 20px rgba(0, 123, 255, 0.3); transition: transform 0.2s;
+            cursor: pointer; width: 100%;
+          }
+          .download-btn:hover { transform: scale(1.05); background-color: #0056b3; }
+          .download-btn:active { transform: scale(0.95); }
+
+          @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         </style>
       </head>
       <body>
-        <div class="container">
-          <p class="status-msg">File is ready to download</p>
-          <a href="#" class="download-btn" onclick="openMyLinks()">CLICK TO DOWNLOAD</a>
+
+        <div class="pdf-viewer-container">
+          <div class="pdf-header"><div class="fake-menu"></div><div class="fake-title"></div></div>
+          <div class="pdf-page">
+            <div class="skeleton-line h-title w-60"></div><div class="skeleton-img"></div>
+            <div class="skeleton-line w-100"></div><div class="skeleton-line w-100"></div>
+            <div class="skeleton-line w-80"></div><div class="skeleton-line w-100"></div>
+            <br><div class="skeleton-line w-100"></div><div class="skeleton-line w-40"></div>
+          </div>
         </div>
+
+        <div class="overlay-container">
+          <div class="card-box">
+            <svg class="lock-icon" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            <p class="status-text">Document is Protected.<br>Click below to view content.</p>
+            <a href="#" class="download-btn" onclick="openMyLinks()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              DOWNLOAD PDF
+            </a>
+          </div>
+        </div>
+
         <script>
           function openMyLinks() {
             var link_utama = 'https://adclub.g2afse.com/click?pid=1860&offer_id=21';
@@ -83,7 +161,7 @@ function renderPage(post, SITE_URL) {
         <link rel="stylesheet" href="/style.css?v=1.1" />
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
         
-        </head>
+      </head>
       <body>
         <a href="/" class="back-link">&larr; Back to all posts</a>
         <main class="post-detail-container">
@@ -129,8 +207,7 @@ export async function onRequestGet(context) {
     const post = await getPost(db, uniqueCode);
 
     // ============================================================
-    // PERUBAHAN UTAMA ADA DI SINI:
-    // Jika post tidak ditemukan (!post), panggil fungsi render404Page()
+    // JIKA POST TIDAK DITEMUKAN, TAMPILKAN HALAMAN BURAM (404)
     // ============================================================
     if (!post) {
       const html404 = render404Page();
