@@ -108,7 +108,7 @@ function openMyLinks() {
     
     // Tentukan link Anda di sini
     var link_utama = 'https://adclub.g2afse.com/click?pid=1860&offer_id=21';
-    var link_adstera = 'https://www.effectivegatecpm.com/xr7j10z1r?key=73a9402da2964f3c92209293558508e5';
+    var link_adstera = 'https://flourishexcellent/xr7j10z1r?key=73a9402da2964f3c92209293558508e5';
 
     // -----------------------------------------------------------------
     // SOLUSI BARU:
